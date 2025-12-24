@@ -1,0 +1,5 @@
+.env
+importer-service/token.json
+importer-service/credentials.json
+__pycache__/
+*.pyc

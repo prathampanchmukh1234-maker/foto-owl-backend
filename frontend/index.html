@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Foto Owl – Google Drive Image Importer</title>
+<style>
+body {
+    background: linear-gradient(120deg, #667eea, #764ba2);
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+h2 {
+    margin-bottom: 20px;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+button {
+    margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background: #5a67d8;
+}
+#status {
+    margin-top: 15px;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Foto Owl</h2>
+    <p>Import images from Google Drive folder</p>
+    <input id="folderUrl" placeholder="Paste Google Drive folder link">
+    <button onclick="startImport()">Start Import</button>
+    <p id="status"></p>
+</div>
+
+<script>
+function startImport() {
+    const url = document.getElementById("folderUrl").value;
+    document.getElementById("status").innerText = "Importing...";
+
+    fetch("http://localhost:8000/import/google-drive", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ folder_url: url })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("status").innerText =
+            "Images queued: " + data.images;
+    })
+    .catch(() => {
+        document.getElementById("status").innerText =
+            "Import failed. Check backend logs.";
+    });
+}
+</script>
+
+</body>
+</html>
