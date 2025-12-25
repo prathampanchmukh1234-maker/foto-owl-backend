@@ -2,7 +2,7 @@ services:
   - type: web
     name: foto-owl-frontend
     env: docker
-    dockerfilePath: ./frontend/Dockerfile
+    dockerfilePath: ./Dockerfile.frontend
     plan: free
 
   - type: web
