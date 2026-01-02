@@ -3,11 +3,11 @@ import psycopg2
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-def get_connection():
+def get_db():
     return psycopg2.connect(DATABASE_URL)
 
-def create_tables():
-    conn = get_connection()
+def ensure_tables():
+    conn = get_db()
     cur = conn.cursor()
 
     cur.execute("""
