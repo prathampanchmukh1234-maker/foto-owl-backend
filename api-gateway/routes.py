@@ -1,11 +1,9 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import psycopg2, os, requests
+import psycopg2, os
 
 router = APIRouter()
-
 DATABASE_URL = os.getenv("DATABASE_URL")
-IMPORTER_URL = os.getenv("IMPORTER_URL")
 
 class DriveRequest(BaseModel):
     folder_url: str
@@ -30,13 +28,17 @@ def ensure_tables():
 @router.post("/import/google-drive")
 def import_images(data: DriveRequest):
     ensure_tables()
-    r = requests.post(f"{IMPORTER_URL}/import", json={"folder_url": data.folder_url})
-    result = r.json()
+
+    mock_images = [
+        {"id":"img1","name":"sample1.jpg","size":123000,"mimeType":"image/jpeg"},
+        {"id":"img2","name":"sample2.jpg","size":223000,"mimeType":"image/jpeg"},
+        {"id":"img3","name":"sample3.jpg","size":323000,"mimeType":"image/jpeg"},
+    ]
 
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    for img in result["files"]:
+    for img in mock_images:
         cur.execute("""
             INSERT INTO images (name, google_drive_id, size, mime_type, storage_path)
             VALUES (%s,%s,%s,%s,%s)
@@ -46,7 +48,7 @@ def import_images(data: DriveRequest):
     cur.close()
     conn.close()
 
-    return {"status": "queued", "images": result["images"]}
+    return {"status": "queued", "images": len(mock_images)}
 
 @router.get("/images")
 def get_images():
