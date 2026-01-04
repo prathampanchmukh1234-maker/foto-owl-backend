@@ -6,7 +6,12 @@ services:
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: S3_ENDPOINT
+        value: s3.us-east-005.backblazeb2.com
       - key: S3_KEY
+        value: YOUR_BACKBLAZE_KEY_ID
       - key: S3_SECRET
+        value: YOUR_BACKBLAZE_APPLICATION_KEY
       - key: S3_BUCKET
+        value: foto-owl
       - key: GOOGLE_API_KEY
+        value: YOUR_GOOGLE_API_KEY
